@@ -1,0 +1,24 @@
+# Compiled output
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Angular cache
+.angular/cache/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Sass / CSS
+.sass-cache/
+
+# Test / Coverage
+coverage/
+__screenshots__/
+testem.log
+libpeerconnection.log
+connect.lock
+typings

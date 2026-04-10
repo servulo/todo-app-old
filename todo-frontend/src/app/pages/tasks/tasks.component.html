@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="header">
+    <h2>Minhas Tarefas</h2>
+    <button (click)="logout()">Sair</button>
+  </div>
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <div class="new-task">
+    <input
+      type="text"
+      placeholder="Título da tarefa"
+      [(ngModel)]="newTask.title"
+    />
+    <input
+      type="text"
+      placeholder="Descrição (opcional)"
+      [(ngModel)]="newTask.description"
+    />
+    <button (click)="createTask()">Adicionar</button>
+  </div>
+
+  <ul>
+    <li *ngFor="let task of tasks">
+      <input
+        type="checkbox"
+        [checked]="task.completed"
+        (change)="toggleComplete(task)"
+      />
+      <span [class.done]="task.completed">{{ task.title }}</span>
+      <button (click)="deleteTask(task.id!)">Excluir</button>
+    </li>
+  </ul>
+</div>

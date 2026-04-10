@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>Cadastro</h2>
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="success">
+    {{ successMessage }}
+  </div>
+
+  <input
+    type="text"
+    placeholder="Usuário"
+    [(ngModel)]="username"
+  />
+
+  <input
+    type="password"
+    placeholder="Senha"
+    [(ngModel)]="password"
+  />
+
+  <button (click)="register()">Cadastrar</button>
+
+  <p>Já tem conta? <a routerLink="/login">Faça login</a></p>
+</div>
