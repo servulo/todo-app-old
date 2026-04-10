@@ -9,7 +9,6 @@ pool:
 variables:
   acrName: sprjacrshared
   imageName: todo-backend
-  tag: $(Build.BuildId)
   dateTag: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
 
 steps:
@@ -32,3 +31,5 @@ steps:
       tags: |
         $(dateTag)
         latest
+    env:
+      DOCKER_BUILDKIT: 0
