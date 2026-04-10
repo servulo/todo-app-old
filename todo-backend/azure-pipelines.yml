@@ -1,21 +1,26 @@
 trigger:
   paths:
     include:
-      - todo-frontend/*
+      - todo-backend/*
 
 pool:
   name: Default
 
 variables:
   acrName: sprjacrshared
-  imageName: todo-frontend
+  imageName: todo-backend
+  tag: $(Build.BuildId)
   dateTag: $[format('{0:yyyyMMdd-HHmm}', pipeline.startTime)]
 
 steps:
-  - task: NodeTool@0
-    displayName: 'Instalar Node.js'
+  - task: Maven@4
+    displayName: 'Build Quarkus'
     inputs:
-      versionSpec: '20.x'
+      mavenPomFile: 'todo-backend/pom.xml'
+      goals: 'package'
+      options: '-DskipTests'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.25'
 
   - task: Docker@2
     displayName: 'Build e Push da imagem'
@@ -23,7 +28,7 @@ steps:
       containerRegistry: 'acr-connection'
       repository: '$(imageName)'
       command: 'buildAndPush'
-      Dockerfile: 'todo-frontend/Dockerfile'
+      Dockerfile: 'todo-backend/Dockerfile'
       tags: |
         $(dateTag)
         latest
