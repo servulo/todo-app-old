@@ -12,6 +12,11 @@ variables:
   dateTag: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
 
 steps:
+  - script: |
+      echo "$(JWT_PRIVATE_KEY)" > todo-backend/src/main/resources/privateKey.pem
+      echo "$(JWT_PUBLIC_KEY)" > todo-backend/src/main/resources/publicKey.pem
+    displayName: 'Criar arquivos PEM'
+    
   - task: Maven@4
     displayName: 'Build Quarkus'
     inputs:
