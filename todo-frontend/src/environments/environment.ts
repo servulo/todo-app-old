@@ -1,4 +1,4 @@
 export const environment = {
-    production: false,
-    apiUrl: 'http://localhost:8080'
+  production: false,
+  apiUrl: 'https://sprj-ca-todo-backend.salmonhill-9ed0043a.brazilsouth.azurecontainerapps.io'
 };
