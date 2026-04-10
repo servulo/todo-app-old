@@ -27,3 +27,5 @@ steps:
       tags: |
         $(dateTag)
         latest
+    env:
+      DOCKER_BUILDKIT: 0        
