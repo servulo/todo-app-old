@@ -12,9 +12,14 @@ variables:
   dateTag: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
 
 steps:
-  - script: |
-      echo "$(JWT_PRIVATE_KEY)" > todo-backend/src/main/resources/privateKey.pem
-      echo "$(JWT_PUBLIC_KEY)" > todo-backend/src/main/resources/publicKey.pem
+  - pwsh: |
+      $privateKeyBytes = [Convert]::FromBase64String("$(JWT_PRIVATE_KEY)")
+      $privateKey = [System.Text.Encoding]::UTF8.GetString($privateKeyBytes)
+      Set-Content -Path "todo-backend/src/main/resources/privateKey.pem" -Value $privateKey -NoNewline
+
+      $publicKeyBytes = [Convert]::FromBase64String("$(JWT_PUBLIC_KEY)")
+      $publicKey = [System.Text.Encoding]::UTF8.GetString($publicKeyBytes)
+      Set-Content -Path "todo-backend/src/main/resources/publicKey.pem" -Value $publicKey -NoNewline
     displayName: 'Criar arquivos PEM'
     
   - task: Maven@4
