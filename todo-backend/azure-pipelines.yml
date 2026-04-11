@@ -7,15 +7,27 @@ pool:
   name: Default
 
 variables:
-  acrName: sprjacrshared
-  imageName: todo-backend
-  dateTag: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
+  - group: todo-app-secrets
+  - name: acrName
+    value: sprjacrshared
+  - name: imageName
+    value: todo-backend
+  - name: dateTag
+    value: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
 
 steps:
-  - script: |
-      echo "$(JWT_PRIVATE_KEY)" > todo-backend/src/main/resources/privateKey.pem
-      echo "$(JWT_PUBLIC_KEY)" > todo-backend/src/main/resources/publicKey.pem
+  - pwsh: |
+      $privateKeyBytes = [Convert]::FromBase64String($env:JWT_PRIVATE_KEY)
+      $privateKey = [System.Text.Encoding]::UTF8.GetString($privateKeyBytes)
+      Set-Content -Path "todo-backend/src/main/resources/privateKey.pem" -Value $privateKey -NoNewline
+
+      $publicKeyBytes = [Convert]::FromBase64String($env:JWT_PUBLIC_KEY)
+      $publicKey = [System.Text.Encoding]::UTF8.GetString($publicKeyBytes)
+      Set-Content -Path "todo-backend/src/main/resources/publicKey.pem" -Value $publicKey -NoNewline
     displayName: 'Criar arquivos PEM'
+    env:
+      JWT_PRIVATE_KEY: $(JWT_PRIVATE_KEY)
+      JWT_PUBLIC_KEY: $(JWT_PUBLIC_KEY)
     
   - task: Maven@4
     displayName: 'Build Quarkus'
@@ -38,3 +50,15 @@ steps:
         latest
     env:
       DOCKER_BUILDKIT: 0
+
+  - task: AzureCLI@2
+    displayName: 'Deploy no Container App — Backend'
+    inputs:
+      azureSubscription: 'azure-connection'
+      scriptType: 'pscore'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az containerapp update `
+          --name sprj-ca-todo-backend `
+          --resource-group sprj-rg-todo `
+          --image sprjacrshared.azurecr.io/todo-backend:latest
