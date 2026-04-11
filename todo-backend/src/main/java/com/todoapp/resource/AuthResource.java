@@ -5,6 +5,7 @@ import java.util.Map;
 import com.todoapp.dto.AuthDTO;
 import com.todoapp.service.AuthService;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -24,6 +25,7 @@ public class AuthResource {
 
     @POST
     @Path("/register")
+    @RolesAllowed({"user"})
     public Response register(@Valid AuthDTO dto) {
         try {
             authService.register(dto.username, dto.password);

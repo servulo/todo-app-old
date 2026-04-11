@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../core/services/task.service';
@@ -9,7 +9,7 @@ import { Task } from '../../models/task.model';
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './tasks.component.html'
 })
 export class TasksComponent implements OnInit {
