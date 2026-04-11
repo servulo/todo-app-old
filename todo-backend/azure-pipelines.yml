@@ -13,14 +13,10 @@ variables:
 
 steps:
   - pwsh: |
-      $privateKeyBytes = [Convert]::FromBase64String($env:JWT_PRIVATE_KEY)
-      $privateKey = [System.Text.Encoding]::UTF8.GetString($privateKeyBytes)
-      Set-Content -Path "todo-backend/src/main/resources/privateKey.pem" -Value $privateKey -NoNewline
-
-      $publicKeyBytes = [Convert]::FromBase64String($env:JWT_PUBLIC_KEY)
-      $publicKey = [System.Text.Encoding]::UTF8.GetString($publicKeyBytes)
-      Set-Content -Path "todo-backend/src/main/resources/publicKey.pem" -Value $publicKey -NoNewline
-    displayName: 'Criar arquivos PEM'
+      Write-Host "Tamanho da variável JWT_PRIVATE_KEY: $($env:JWT_PRIVATE_KEY.Length)"
+      Write-Host "Primeiros 50 chars: $($env:JWT_PRIVATE_KEY.Substring(0, [Math]::Min(50, $env:JWT_PRIVATE_KEY.Length)))"
+      Write-Host "Últimos 10 chars: $($env:JWT_PRIVATE_KEY.Substring([Math]::Max(0, $env:JWT_PRIVATE_KEY.Length - 10)))"
+    displayName: 'Diagnosticar JWT_PRIVATE_KEY'
     env:
       JWT_PRIVATE_KEY: $(JWT_PRIVATE_KEY)
       JWT_PUBLIC_KEY: $(JWT_PUBLIC_KEY)
