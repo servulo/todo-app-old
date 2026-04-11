@@ -7,9 +7,13 @@ pool:
   name: Default
 
 variables:
-  acrName: sprjacrshared
-  imageName: todo-backend
-  dateTag: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
+  - group: todo-app-secrets
+  - name: acrName
+    value: sprjacrshared
+  - name: imageName
+    value: todo-backend
+  - name: dateTag
+    value: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
 
 steps:
   - pwsh: |
