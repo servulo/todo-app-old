@@ -13,14 +13,17 @@ variables:
 
 steps:
   - pwsh: |
-      $privateKeyBytes = [Convert]::FromBase64String("$(JWT_PRIVATE_KEY)")
+      $privateKeyBytes = [Convert]::FromBase64String($env:JWT_PRIVATE_KEY)
       $privateKey = [System.Text.Encoding]::UTF8.GetString($privateKeyBytes)
       Set-Content -Path "todo-backend/src/main/resources/privateKey.pem" -Value $privateKey -NoNewline
 
-      $publicKeyBytes = [Convert]::FromBase64String("$(JWT_PUBLIC_KEY)")
+      $publicKeyBytes = [Convert]::FromBase64String($env:JWT_PUBLIC_KEY)
       $publicKey = [System.Text.Encoding]::UTF8.GetString($publicKeyBytes)
       Set-Content -Path "todo-backend/src/main/resources/publicKey.pem" -Value $publicKey -NoNewline
     displayName: 'Criar arquivos PEM'
+    env:
+      JWT_PRIVATE_KEY: $(JWT_PRIVATE_KEY)
+      JWT_PUBLIC_KEY: $(JWT_PUBLIC_KEY)
     
   - task: Maven@4
     displayName: 'Build Quarkus'
