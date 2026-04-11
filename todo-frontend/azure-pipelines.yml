@@ -29,3 +29,15 @@ steps:
         latest
     env:
       DOCKER_BUILDKIT: 0        
+
+  - task: AzureCLI@2
+    displayName: 'Deploy no Container App — Frontend'
+    inputs:
+      azureSubscription: 'azure-connection'
+      scriptType: 'pscore'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az containerapp update `
+          --name sprj-ca-todo-frontend `
+          --resource-group sprj-rg-todo `
+          --image sprjacrshared.azurecr.io/todo-frontend:latest
