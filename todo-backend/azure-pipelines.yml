@@ -61,4 +61,4 @@ steps:
         az containerapp update `
           --name sprj-ca-todo-backend `
           --resource-group sprj-rg-todo `
-          --image sprjacrshared.azurecr.io/todo-backend:latest
+          --image sprjacrshared.azurecr.io/todo-backend:$(dateTag)
