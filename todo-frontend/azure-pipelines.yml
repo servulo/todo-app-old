@@ -7,7 +7,7 @@ pool:
   name: Default
 
 variables:
-  acrName: sprjacrshared
+  acrName: sprjacr
   imageName: todo-frontend
   dateTag: $[format('{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}', pipeline.startTime)]
 
@@ -20,7 +20,7 @@ steps:
   - task: Docker@2
     displayName: 'Build e Push da imagem'
     inputs:
-      containerRegistry: 'acr-connection'
+      containerRegistry: 'sprjacr-connection'
       repository: '$(imageName)'
       command: 'buildAndPush'
       Dockerfile: 'todo-frontend/Dockerfile'
@@ -39,5 +39,5 @@ steps:
       inlineScript: |
         az containerapp update `
           --name sprj-ca-todo-frontend `
-          --resource-group sprj-rg-todo `
-          --image sprjacrshared.azurecr.io/todo-frontend:$(dateTag)
+          --resource-group sprj-rg `
+          --image sprjacr.azurecr.io/todo-frontend:$(dateTag)
