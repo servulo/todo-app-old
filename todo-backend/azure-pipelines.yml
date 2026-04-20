@@ -59,6 +59,6 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         az containerapp update `
-          --name sprj-ca-todo-app `           
-          --resource-group sprj-rg `          
-          --image sprjacr.azurecr.io/todo-backend:$(dateTag)  
+          --name sprj-ca-todo-app `
+          --resource-group sprj-rg `
+          --image sprjacr.azurecr.io/todo-backend:$(dateTag)
