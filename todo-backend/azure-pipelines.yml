@@ -9,7 +9,7 @@ pool:
 variables:
   - group: todo-app-secrets
   - name: acrName
-    value: sprjacrshared
+    value: sprjacr                          # era: sprjacrshared
   - name: imageName
     value: todo-backend
   - name: dateTag
@@ -41,7 +41,7 @@ steps:
   - task: Docker@2
     displayName: 'Build e Push da imagem'
     inputs:
-      containerRegistry: 'acr-connection'
+      containerRegistry: 'sprjacr-connection'
       repository: '$(imageName)'
       command: 'buildAndPush'
       Dockerfile: 'todo-backend/Dockerfile'
@@ -59,6 +59,6 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         az containerapp update `
-          --name sprj-ca-todo-backend `
-          --resource-group sprj-rg-todo `
-          --image sprjacrshared.azurecr.io/todo-backend:$(dateTag)
+          --name sprj-ca-todo-app `           # era: sprj-ca-todo-backend
+          --resource-group sprj-rg `          # era: sprj-rg-todo
+          --image sprjacr.azurecr.io/todo-backend:$(dateTag)   # era: sprjacrshared.azurecr.io
