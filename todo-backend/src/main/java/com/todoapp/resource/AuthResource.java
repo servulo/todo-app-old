@@ -25,7 +25,7 @@ public class AuthResource {
 
     @POST
     @Path("/register")
-    @RolesAllowed({"user"})
+    //@RolesAllowed({"user"})
     public Response register(@Valid AuthDTO dto) {
         try {
             authService.register(dto.username, dto.password);
