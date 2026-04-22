@@ -9,18 +9,16 @@ import { Observable, tap } from "rxjs";
 })
 export class AuthService {
 
-    private apiUrl = `${environment.apiUrl}/auth`;
+    private authUrl = `${environment.authUrl}/auth`;
 
-    constructor(private http: HttpClient) {
-
-    }
+    constructor(private http: HttpClient) {}
 
     register(data: AuthRequest): Observable<any> {
-        return this.http.post(`${this.apiUrl}/register`, data);
+        return this.http.post(`${this.authUrl}/register`, data);
     }
 
     login(data: AuthRequest): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(
+        return this.http.post<AuthResponse>(`${this.authUrl}/login`, data).pipe(
             tap(response => this.saveToken(response.token))
         );
     }
@@ -39,6 +37,5 @@ export class AuthService {
 
     saveToken(token: string): void {
         localStorage.setItem('token', token);
-    }    
-
+    }
 }
