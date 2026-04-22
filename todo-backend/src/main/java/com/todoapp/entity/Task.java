@@ -9,18 +9,20 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tasks")
-public class Task extends PanacheEntity{
+public class Task extends PanacheEntity {
 
     @Column(nullable = false)
     public String title;
 
-    @Column(length = 50)
+    @Column(length = 500)
     public String description;
 
     @Column(nullable = false)
     public boolean completed;
 
+    @Column(name = "owner_id", nullable = false)
+    public Long ownerId;
+
     @Column(name = "created_at")
     public LocalDateTime createdAt = LocalDateTime.now();
-
 }

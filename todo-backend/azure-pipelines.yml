@@ -9,7 +9,7 @@ pool:
 variables:
   - group: todo-app-secrets
   - name: acrName
-    value: sprjacr                          
+    value: sprjacr
   - name: imageName
     value: todo-backend
   - name: dateTag
@@ -17,18 +17,15 @@ variables:
 
 steps:
   - pwsh: |
-      $privateKeyBytes = [Convert]::FromBase64String($env:JWT_PRIVATE_KEY)
-      $privateKey = [System.Text.Encoding]::UTF8.GetString($privateKeyBytes)
-      Set-Content -Path "todo-backend/src/main/resources/privateKey.pem" -Value $privateKey -NoNewline
+      New-Item -ItemType Directory -Force -Path "todo-backend/src/main/resources"
 
-      $publicKeyBytes = [Convert]::FromBase64String($env:JWT_PUBLIC_KEY)
+      $publicKeyBytes = [Convert]::FromBase64String($env:AUTH_PUBLIC_KEY)
       $publicKey = [System.Text.Encoding]::UTF8.GetString($publicKeyBytes)
       Set-Content -Path "todo-backend/src/main/resources/publicKey.pem" -Value $publicKey -NoNewline
-    displayName: 'Criar arquivos PEM'
+    displayName: 'Injetar publicKey do auth service'
     env:
-      JWT_PRIVATE_KEY: $(JWT_PRIVATE_KEY)
-      JWT_PUBLIC_KEY: $(JWT_PUBLIC_KEY)
-    
+      AUTH_PUBLIC_KEY: $(AUTH_PUBLIC_KEY)
+
   - task: Maven@4
     displayName: 'Build Quarkus'
     inputs:

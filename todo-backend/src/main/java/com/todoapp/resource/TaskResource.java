@@ -27,20 +27,24 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @RolesAllowed("user")
 public class TaskResource {
-    
+
     @Inject
     JsonWebToken jwt;
 
+    private Long currentUserId() {
+        return Long.parseLong(jwt.getSubject());
+    }
+
     @GET
     public List<Task> listAll() {
-        return Task.listAll();
+        return Task.find("ownerId", currentUserId()).list();
     }
 
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
         Task task = Task.findById(id);
-        if(task==null) {
+        if (task == null || !task.ownerId.equals(currentUserId())) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(task).build();
@@ -52,6 +56,7 @@ public class TaskResource {
         Task task = new Task();
         task.title = dto.title;
         task.description = dto.description;
+        task.ownerId = currentUserId();
         task.persist();
         return Response.status(Response.Status.CREATED).entity(task).build();
     }
@@ -61,7 +66,7 @@ public class TaskResource {
     @Transactional
     public Response update(@PathParam("id") Long id, @Valid TaskDTO dto) {
         Task task = Task.findById(id);
-        if(task == null) {
+        if (task == null || !task.ownerId.equals(currentUserId())) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         task.title = dto.title;
@@ -74,11 +79,11 @@ public class TaskResource {
     @Path("/{id}")
     @Transactional
     public Response delete(@PathParam("id") Long id) {
-        boolean deleted = Task.deleteById(id);
-        if(!deleted) {
+        Task task = Task.findById(id);
+        if (task == null || !task.ownerId.equals(currentUserId())) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+        task.delete();
         return Response.noContent().build();
     }
-
 }
