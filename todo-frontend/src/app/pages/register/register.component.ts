@@ -12,7 +12,8 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class RegisterComponent {
 
-  username = '';
+  name = '';
+  email = '';
   password = '';
   errorMessage = '';
   successMessage = '';
@@ -24,7 +25,7 @@ export class RegisterComponent {
   ) {}
 
   register(): void {
-    this.authService.register({ username: this.username, password: this.password })
+    this.authService.register({ name: this.name, email: this.email, password: this.password })
       .subscribe({
         next: () => {
           this.successMessage = 'Usuário criado com sucesso!';
@@ -32,7 +33,7 @@ export class RegisterComponent {
           setTimeout(() => this.router.navigate(['/login']), 2000);
         },
         error: () => {
-          this.errorMessage = 'Erro ao criar usuário. Tente outro nome.',
+          this.errorMessage = 'Erro ao criar usuário. Tente novamente.';
           this.cdr.detectChanges();
         }
       });

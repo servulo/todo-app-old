@@ -1,8 +1,12 @@
 export interface AuthRequest {
-    username: string;
+    name?: string;
+    email: string;
     password: string;
 }
 
 export interface AuthResponse {
-    token: string
+    token: string;
+    userId: number;
+    name: string;
+    email: string;
 }

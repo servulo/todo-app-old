@@ -12,7 +12,7 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class LoginComponent {
 
-  username = '';
+  email = '';
   password = '';
   errorMessage = '';
 
@@ -23,11 +23,11 @@ export class LoginComponent {
   ) {}
 
   login(): void {
-    this.authService.login({ username: this.username, password: this.password })
+    this.authService.login({ email: this.email, password: this.password })
       .subscribe({
         next: () => this.router.navigate(['/tasks']),
         error: () => {
-          this.errorMessage = 'Usuário ou senha inválidos';
+          this.errorMessage = 'E-mail ou senha inválidos';
           this.cdr.detectChanges();
         }
       });
