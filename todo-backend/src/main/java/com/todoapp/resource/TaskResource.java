@@ -7,7 +7,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import com.todoapp.dto.TaskDTO;
 import com.todoapp.entity.Task;
 
-import jakarta.annotation.security.RolesAllowed;
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/tasks")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed("user")
+@Authenticated
 public class TaskResource {
 
     @Inject
